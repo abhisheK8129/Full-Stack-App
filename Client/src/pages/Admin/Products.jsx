@@ -1,5 +1,5 @@
 import { AdminProductTile } from "@/components/Admin-Component/Product-tile";
-import { ImageUpload } from "@/components/Admin-Component/imageUpload";
+import { ImageUpload } from "@/components/Admin-Component/ImageUpload.jsx";
 import { addProductElements } from "@/config/Config";
 import { Form } from "@/components/Common/Form";
 import { Button } from "@/components/ui/button";
