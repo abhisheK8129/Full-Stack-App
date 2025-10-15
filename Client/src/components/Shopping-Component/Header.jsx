@@ -55,7 +55,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { toast } from "sonner";
-import { CartWrapper } from "./cart-wrapper";
+import { CartWrapper } from "./Cart-Wrapper.jsx";
 import { fetchTheCartItems } from "@/store/Shopping/Cart-Slice";
 import { DropdownMenuRadioItem } from "@radix-ui/react-dropdown-menu";
 import { useTheme } from "next-themes";
