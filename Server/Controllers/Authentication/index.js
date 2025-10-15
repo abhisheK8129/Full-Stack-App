@@ -51,57 +51,71 @@ const loginTheUser = async(req,res) => {
     const {email,password} = req.body
 
     try{
-        // check the email if it is registered or not
-        const checkTheUser = await User.findOne({email})
+      // check the email if it is registered or not
+      const checkTheUser = await User.findOne({ email });
 
-        // if the email is not registered
-        if(!checkTheUser){
-           return res.json({
-                success: false,
-                message: 'User is not registered with this email. Please create an account firsts'
-            })
-        }
+      // if the email is not registered
+      if (!checkTheUser) {
+        return res.json({
+          success: false,
+          message:
+            "User is not registered with this email. Please create an account firsts",
+        });
+      }
 
-        // match the password you have entered with the registered password with the use of (bcrypt.compare)
-        const matchThePassword = await bcrypt.compare( 
-            password,
-            checkTheUser.password
-        )
+      // match the password you have entered with the registered password with the use of (bcrypt.compare)
+      const matchThePassword = await bcrypt.compare(
+        password,
+        checkTheUser.password
+      );
 
-        // if the password is not matched
-        if(!matchThePassword){
-            return res.json({
-                success: false,
-                message: 'Invalid Password'
-            })
-        }
+      // if the password is not matched
+      if (!matchThePassword) {
+        return res.json({
+          success: false,
+          message: "Invalid Password",
+        });
+      }
 
+      // now create the token using jwt.sign
+      const token = jwt.sign(
+        // now get the user data
+        {
+          id: checkTheUser._id,
+          role: checkTheUser.role,
+          username: checkTheUser.username,
+          email: checkTheUser.email,
+        },
+        "CLIENT_KEY", // secret key
+        { expiresIn: "60m" } // expire time
+      );
 
-        // now create the token using jwt.sign
-        const token = jwt.sign(
-            // now get the user data
-            {
-                id: checkTheUser._id,
-                role: checkTheUser.role,
-                username: checkTheUser.username,
-                email: checkTheUser.email
-            },
-            "CLIENT_KEY", // secret key
-            {expiresIn: '60m'} // expire time
-        )
+      // save the token in cookies with the user data
+      //  when you refresh the page and you have to login again and again then use secure: true otherwise use secure: false
+      // when you want to the cookies to get saved in cookies
+      //   res.cookie("token", token, { httpOnly: true, secure: false }).json({
+      //     success: true,
+      //     message: "Logged In Successfully",
+      //     user: {
+      //       email: checkTheUser.email,
+      //       role: checkTheUser.role,
+      //       id: checkTheUser._id,
+      //       username: checkTheUser.username,
+      //     },
+      //   });
 
-
-        // save the token in cookies with the user data
-        res.cookie("token", token, {httpOnly: true, secure: true}).json({
-            success: true,
-            message: "Logged In Successfully",
-            user: {
-                email: checkTheUser.email,
-                role: checkTheUser.role,
-                id: checkTheUser._id,
-                username: checkTheUser.username
-            }
-        })
+      // when you want to get saved your cookies in your session storage instead of cookies...
+      res.status(200).json({
+        success: true,
+        message: "Logged In Successfully",
+        token,
+        user: { 
+          email: checkTheUser.email,
+          role: checkTheUser.role,
+          id: checkTheUser._id,
+          username: checkTheUser.username,
+        },
+      });
     }
     catch(err){
         res.status(500).json({
@@ -123,11 +137,41 @@ const logoutTheUser =  (req,res) =>{
 
 
 // auth middleware
+// when you want the token in cookies
+// const  authMiddleware = async(req,res,next) =>{
+    
+//     // get the token from the cookies  
+//     const token = req.cookies.token 
 
+//     // if the token is false then the user is not authorized
+//     if(!token){
+//      return res.status(401).json({
+//             success: false,
+//             message: 'User is not authorized'
+//         })
+//     }
+
+//     try{
+//         // to decode the token 
+//         const decoded = jwt.verify(token,'CLIENT_KEY')
+//         req.user = decoded
+//         next()
+//     }catch(err){
+//         res.status(401).json({
+//             success: false,
+//             message: 'user is not authorized'
+//         })
+//     }
+
+
+// }
+
+// when you want the token in your sessionStorage
 const  authMiddleware = async(req,res,next) =>{
     
     // get the token from the cookies  
-    const token = req.cookies.token 
+    const authHeader  = req.headers['authorization']
+    const token = authHeader && authHeader.split(" ")[1]
 
     // if the token is false then the user is not authorized
     if(!token){

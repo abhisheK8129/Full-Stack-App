@@ -29,10 +29,14 @@ function App() {
   );
   const dispatch = useDispatch();
 
-  // use the useEffect to dispatch the checkAuth
+  // use the useEffect to dispatch the checkAuth 
+  // when you want to get the token is sessionStorage then pass the token from the session storage in your check auth api
   useEffect(() => {
-    dispatch(checkTheAuthentication());
+    const token = JSON.parse(sessionStorage.getItem('token'))
+    dispatch(checkTheAuthentication(token));
   }, [dispatch]);
+
+  
 
   // if it still loading do this
   if (isPageLoading) return <div>...Loading</div>;

@@ -8,6 +8,8 @@ const initialState = {
   isUserAuthenticated: false,
   isPageLoading: true,
   user: null,
+  token: null,
+
 };
 
 // create the register api
@@ -55,12 +57,31 @@ export const logoutTheUser = createAsyncThunk(
     }
 );
 
+
+// when you want to get the token in your cookies 
+// export const checkTheAuthentication = createAsyncThunk(
+//   "/auth/checkTheAuthentication",
+//   async () => {
+//     const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/check-auth`, {
+//       withCredentials: true,
+//       headers: {
+//         "Cache-Control":
+//           "no-store, no-cache, must-revalidate, proxy-revalidate",
+//         Expires: "0",
+//       },
+//     });
+//     return result.data;
+//   }
+// );
+
+
+// when you want to get the token in your sessoin storage 
 export const checkTheAuthentication = createAsyncThunk(
   "/auth/checkTheAuthentication",
-  async () => {
+  async (token) => {
     const result = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/check-auth`, {
-      withCredentials: true,
       headers: {
+        Authorization: `Bearer ${token}`,
         "Cache-Control":
           "no-store, no-cache, must-revalidate, proxy-revalidate",
         Expires: "0",
@@ -74,7 +95,14 @@ export const checkTheAuthentication = createAsyncThunk(
 const authSlice = createSlice({
   name: "authenticationSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    resetTokenAndCredentials: (state) =>{
+      state.isUserAuthenticated = false
+      state.user = null;
+      state.token = null;
+    }
+  },
+
 
   // create the extraReducer to do the needful action according to the state of the api
   extraReducers: (builder) => {
@@ -103,11 +131,14 @@ const authSlice = createSlice({
         (state.isPageLoading = false),
           (state.user = action.payload.success ? action.payload.user : null),
           (state.isUserAuthenticated = action.payload.success);
+          state.token = action.payload.token 
+          sessionStorage.setItem('token',JSON.stringify(action.payload.token))
       })
       .addCase(toLoginTheUser.rejected, (state, action) => {
         (state.isPageLoading = false),
           (state.isUserAuthenticated = false),
           (state.user = null);
+          state.token = null
       })
       .addCase(checkTheAuthentication.pending, (state) => {
         state.isPageLoading = true;
@@ -130,3 +161,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+export const {resetTokenAndCredentials} = authSlice.actions

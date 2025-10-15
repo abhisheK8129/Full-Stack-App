@@ -43,7 +43,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { logoutTheUser } from "@/store/auth-slice";
+import { logoutTheUser, resetTokenAndCredentials } from "@/store/auth-slice";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -107,23 +107,38 @@ function RightSideContent() {
   const [openDialog, setOpenDialog] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const { cartItems } = useSelector((state) => state.cartSlice);
+
   useEffect(() => {
     dispatch(fetchTheCartItems(user?.id));
   }, [dispatch]);
 
+
   // to handle the logout
   function toHandleLogout() {
-    dispatch(logoutTheUser()).then((data) => {
-      if (data.payload.success) {
-        toast("logout successfully", {
-          style: {
-            backgroundColor: "red",
-            color: "white",
-          },
-        });
-      }
-    });
+    // when you want to logout the cookies which get saved in your cookies
+    // dispatch(logoutTheUser()).then((data) => {
+
+    //   if (data.payload.success) {
+    //     toast("logout successfully", {
+    //       style: {
+    //         backgroundColor: "red",
+    //         color: "white",
+    //       },
+    //     });
+    //   }
+    // });
+
+
+    // when you want to logout the cookies which get saved in your session storage
+    dispatch(resetTokenAndCredentials())
+    sessionStorage.clear();
+    navigate("/auth/login");
+
+
+
+
   }
+
 
   return (
     <div className="flex lg:items-center   flex-1    lg:flex-row flex-col lg:gap-2    text-white">

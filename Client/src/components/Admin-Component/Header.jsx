@@ -2,21 +2,31 @@ import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { AlignJustify, LogOut, ShoppingCart } from 'lucide-react'
 import { useDispatch } from 'react-redux'
-import { logoutTheUser } from '@/store/auth-slice'
+import { logoutTheUser, resetTokenAndCredentials } from '@/store/auth-slice'
 import { toast } from 'sonner'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../ui/alert-dialog'
 import { getProducts } from '@/store/admin/Product-Slice'
+import { useNavigate } from 'react-router-dom'
 
 export const Header = ({setOpen}) => {
   const dispatch = useDispatch()
   const [openDialog,setOpenDialog] = useState(false)
+  const navigate = useNavigate()
 
   function toLogout() {
-    dispatch(logoutTheUser()).then((data)=>{
-      if(data.payload.success){
-        dispatch(getProducts())
-      }
-    })
+    // when you want to logout the cookies which get saved in your cookies
+    // dispatch(logoutTheUser()).then((data)=>{
+    //   if(data.payload.success){
+    //     dispatch(getProducts())
+    //   }
+    // })
+
+
+    // when you want to logout the cookies which get saved in your session storage
+     dispatch(resetTokenAndCredentials());
+     sessionStorage.clear();
+     navigate("/auth/login");
+    
   }
   return (
     <header className='flex items-center bg-adminSideBar  border-b-2 justify-between px-4 py-4  border-black'>
