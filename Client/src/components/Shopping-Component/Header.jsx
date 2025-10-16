@@ -252,7 +252,7 @@ export const ShoppingHeader = () => {
     (state) => state.authenticationSlice
   );
   return (
-    <header className=" bg-shoppingHeaderClr flex-1    text-white top-0  z-40 w-full fixed">
+    <header className=" bg-shoppingHeaderClr flex-1    text-white top-0  z-40 w-full sticky">
       <div className="flex flex-1 h-16 justify-between  items-center md:px-6">
         {/* A link which goes to the shopping/home */}
         <Link

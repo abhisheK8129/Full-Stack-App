@@ -11,7 +11,7 @@ export const PaymentSuccessPage = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-center font-bold text-green-500 text-2xl">
+        <CardTitle className="text-center font-bold mt-15 text-green-500 text-2xl">
           Congratulations! Your payment is successful.
         </CardTitle>
         <div className="text-center mt-3">
