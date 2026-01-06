@@ -166,7 +166,10 @@ const logoutTheUser =  (req,res) =>{
 
 // }
 
+
+
 // when you want the token in your sessionStorage
+
 const  authMiddleware = async(req,res,next) =>{
     
     // get the token from the cookies  
@@ -185,7 +188,7 @@ const  authMiddleware = async(req,res,next) =>{
         // to decode the token 
         const decoded = jwt.verify(token,'CLIENT_KEY')
         req.user = decoded
-        next()
+        next()  
     }catch(err){
         res.status(401).json({
             success: false,

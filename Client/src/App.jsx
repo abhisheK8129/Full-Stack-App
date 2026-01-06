@@ -109,6 +109,7 @@ function App() {
             </CheckTheAuthentication>
           }
         ></Route>
+        
       </Routes>
     </div>
   );

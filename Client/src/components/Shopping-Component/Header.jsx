@@ -112,7 +112,6 @@ function RightSideContent() {
     dispatch(fetchTheCartItems(user?.id));
   }, [dispatch]);
 
-
   // to handle the logout
   function toHandleLogout() {
     // when you want to logout the cookies which get saved in your cookies
@@ -128,17 +127,11 @@ function RightSideContent() {
     //   }
     // });
 
-
     // when you want to logout the cookies which get saved in your session storage
-    dispatch(resetTokenAndCredentials())
+    dispatch(resetTokenAndCredentials());
     sessionStorage.clear();
     navigate("/auth/login");
-
-
-
-
   }
-
 
   return (
     <div className="flex lg:items-center   flex-1    lg:flex-row flex-col lg:gap-2    text-white">
@@ -211,6 +204,7 @@ function RightSideContent() {
 // get the products according to brands
 export const BrandSection = () => {
   const navigate = useNavigate();
+  const [searchParams,setSearchParams] = useSearchParams()
   function handleBrandNavigation(getCurrItem) {
     sessionStorage.removeItem("filters");
     const currentFilter =
@@ -221,7 +215,13 @@ export const BrandSection = () => {
         : null;
 
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
-    navigate(getCurrItem.path);
+
+     location.pathname.includes("listing") && currentFilter !== null
+      ? setSearchParams(
+          new URLSearchParams(`?category=${getCurrItem?.id}`)
+        )
+      : navigate(getCurrItem?.path);
+    
   }
   return (
     <DropdownMenu>

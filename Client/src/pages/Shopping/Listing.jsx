@@ -124,6 +124,7 @@ export const ShoppingListingPage = () => {
   function toHandleTheFilter(sectionId,currentOption) {
     console.log(filters,'filters');
 
+   
     
 
     /*****  logic for filtering the products *****/
@@ -137,20 +138,24 @@ export const ShoppingListingPage = () => {
     if(indexOfCurrentSection === -1 ){ 
       copyTheFilters = {
         ...copyTheFilters, 
-        [sectionId]: [currentOption]   
+        [sectionId] : [currentOption]
       }
-      
-      console.log(indexOfCurrentSection,'indexOfCurrentSection');
+      console.log(sectionId,'sectionId');
     }
+
     else{
       // will check if the option is added or not
       const indexOfCurrentOption  =  copyTheFilters[sectionId].indexOf(currentOption)
 
       if(indexOfCurrentOption === -1){
         copyTheFilters[sectionId].push(currentOption) // push the option in the section
+        console.log(copyTheFilters,'copyTheFilters');
+        
       }
       else{
-        copyTheFilters[sectionId].splice(indexOfCurrentOption, 1) // remove the option from the section
+        copyTheFilters[sectionId].splice(currentOption, 1) // remove the option from the section
+        console.log(copyTheFilters,'toRemoveTheFilters');
+
       }
     }
 
@@ -159,8 +164,8 @@ export const ShoppingListingPage = () => {
     // set the filters in session storage 
     sessionStorage.setItem('filters',JSON.stringify(copyTheFilters))
     
-    
   }
+
 
 
   // to get the product details

@@ -9,8 +9,8 @@ const initialState = {
   isPageLoading: true,
   user: null,
   token: null,
-
 };
+
 
 // create the register api
 export const toRegisterTheUser = createAsyncThunk(

@@ -28,7 +28,7 @@ export const FilterTheProduct = ({ filters, toHandleTheFilter }) => {
                       }
                       // when checkbox gets changed
                       onCheckedChange={() =>
-                        toHandleTheFilter(keyItems, filterOptions.id)
+                        toHandleTheFilter(keyItems, filterOptions.id) 
                       }
                     />
                     {filterOptions.label}

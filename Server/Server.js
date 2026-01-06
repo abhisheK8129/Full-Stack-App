@@ -16,7 +16,8 @@ const featuresRouter = require('././routes/Common/Feature-route')
 require('dotenv').config()
 
 const app  = express()
-const port =  process.env.PORT || 7000
+// const port =  process.env.PORT || 7000
+const port = 7000
 
 mongoose.connect(process.env.MongoUrl)
 .then(()=>console.log('connected to the database'))
@@ -26,7 +27,7 @@ mongoose.connect(process.env.MongoUrl)
 
 
 app.use(cookieParser())
-app.use(express.json())
+app.use(express.json())  
 app.use(cors({
     origin:process.env.Client_Side_Url,
     methods: ["GET","POST","PUT","DELETE"],

@@ -1,15 +1,10 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 
-export const CheckTheAuthentication = ({
-  isUserAuthenticated,
-  user,
-  children,
-}) => {
+export const CheckTheAuthentication = ({isUserAuthenticated,user,children,}) => {
   const location = useLocation();
   console.log(location);
   
-
   // if the location is '/' then 
   if(location.pathname === '/'){
     // if the user is not authenticated then return the user to the login page
